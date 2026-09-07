@@ -1,16 +1,18 @@
 {
   "name": "deep-code-review",
-  "version": "0.1.0+codex.20260907113550",
+  "version": "0.1.0+codex.20260907173215",
   "description": "Five-lane deep code and isolated GitHub PR reviews with Tracker context and Matt Pocock's checks.",
   "author": {
-    "name": "Local developer"
+    "name": "Shangin"
   },
+  "homepage": "https://github.com/jhoncool/shangin-skills#deep-code-review",
+  "repository": "https://github.com/jhoncool/shangin-skills",
   "skills": "./skills/",
   "interface": {
     "displayName": "Deep Code Review",
     "shortDescription": "Deep code and isolated GitHub PR reviews.",
-    "longDescription": "Provides two workflows: deep review of local changes and isolated GitHub PR or branch review. Every non-trivial review runs five subagent lanes in 3+2 batches: Correctness, Integration, Resilience, Standards, and Spec. Both workflows use stable finding IDs and available Yandex Tracker context.",
-    "developerName": "Local developer",
+    "longDescription": "Provides two workflows: deep review of local changes and isolated GitHub PR or branch review. Requires Git; an authenticated GitHub CLI is recommended for complete PR context, with a git-only fallback when it is unavailable. Matt Pocock's code-review checks and both review skills are bundled. Yandex Tracker context is optional. Every non-trivial review runs five subagent lanes in 3+2 batches and reports stable finding IDs.",
+    "developerName": "Shangin",
     "category": "Developer Tools",
     "capabilities": [],
     "defaultPrompt": "Use $deep-code-review for local changes, or $github-pr-worktree-review for a GitHub PR or remote branch."

@@ -7,13 +7,21 @@ description: Prepare and deeply review a GitHub pull request or remote branch in
 
 Review the requested GitHub change set from an isolated linked worktree. Do not edit code, post to GitHub, create commits, or push unless the user separately requests that action.
 
-## Required dependency
+## Required dependency and preflight
 
 Before running commands, reading PR metadata, fetching refs, or changing a checkout, verify that the bundled `$deep-code-review` skill is available in the current task's skill catalog. If it is unavailable, stop immediately. Do not prepare the worktree and do not perform a fallback review. Return this error exactly:
 
 ```text
 ERROR [missing-dependency]: GitHub PR Worktree Review requires the bundled $deep-code-review skill. Reinstall or enable the Deep Code Review plugin, then start a new task.
 ```
+
+After the catalog check succeeds, run the bundled preflight from this skill's installed directory:
+
+```bash
+<skill-dir>/../../scripts/doctor.sh --workflow github-pr-worktree-review
+```
+
+Stop on any `ERROR` and return the script's remediation. Do not install system programs or external plugins automatically. A `WARNING [missing-gh]` activates the git-only prerequisites below; it does not by itself block the review.
 
 ## Prerequisites
 

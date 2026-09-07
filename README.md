@@ -1,149 +1,101 @@
 # shangin-skills
 
-Git-репозиторий с исходниками личных Codex-плагинов. Репозиторий одновременно является локальным Codex marketplace, поэтому в него можно добавлять несколько независимых плагинов и устанавливать их по имени.
+## Deep Code Review
 
-## Структура
+Плагин для глубокого ревью локальных изменений, GitHub pull request и удалённых веток. Он устанавливает два скилла:
+
+- `deep-code-review` — ревью локальных изменений или заданного диапазона коммитов.
+- `github-pr-worktree-review` — ревью GitHub PR или удалённой ветки в изолированном Git worktree.
+
+## Требования
+
+| Компонент | Статус |
+|---|---|
+| [Git](https://git-scm.com/downloads) | Обязателен |
+| [GitHub CLI (`gh`)](https://cli.github.com/) и авторизация GitHub | Рекомендуются для полного PR-контекста, статусов проверок и автоматического определения base-ветки |
+| Matt Pocock `code-review` | Уже включён в плагин; отдельная установка через `npx skills` не нужна |
+| `deep-code-review` для Worktree Review | Уже включён в тот же плагин |
+| `datalens-team-skills:startrek` | Опционален; добавляет описание и комментарии из Yandex Tracker |
+
+Проверьте системные зависимости:
+
+```bash
+git --version
+gh --version
+gh auth status
+```
+
+Если GitHub CLI установлен, но ещё не авторизован, выполните `gh auth login --hostname github.com`.
+
+Без `gh` Worktree Review может работать в ограниченном git-only режиме: передайте полный URL PR и явно назовите base-ветку.
+
+При запуске скиллы сами проверяют обязательные зависимости и целостность комплекта. Они не устанавливают системные программы автоматически: при отсутствии `git` работа остановится с инструкцией, а отсутствие `gh` включит git-only режим.
+
+## Установка
+
+Добавьте Git marketplace и установите плагин:
+
+```bash
+codex plugin marketplace add https://github.com/jhoncool/shangin-skills.git --ref main
+codex plugin add deep-code-review@shangin-skills
+```
+
+Если marketplace уже зарегистрирован, первую команду повторять не нужно. Проверить его можно так:
+
+```bash
+codex plugin marketplace list
+```
+
+Для Tracker-контекста установите доступный вашей среде плагин со скиллом Startrek. В текущем Yandex marketplace это:
+
+```bash
+codex plugin add datalens-team-skills@datalens-marketplace
+```
+
+После установки откройте новую задачу Codex, чтобы она получила обновлённый каталог скиллов.
+
+## Локальное ревью
+
+Пример ревью незакоммиченных изменений:
 
 ```text
-.agents/plugins/marketplace.json  # каталог плагинов для Codex
-plugins/
-  deep-code-review/               # один самодостаточный плагин
-requirements-dev.txt              # зависимости штатных валидаторов
-scripts/
-  bootstrap-dev.sh                # локальное окружение для проверок
-  bump-plugin-version.sh          # новый cachebuster и валидация
-  validate-marketplace.py         # целостность общего каталога
-  validate-plugin.sh              # проверка каталога, манифеста и SKILL.md
+Используй $deep-code-review и проверь все незакоммиченные изменения.
 ```
 
-Каждый новый плагин хранится в `plugins/<plugin-name>` и обязан содержать `.codex-plugin/plugin.json`. Запись с тем же именем добавляется в `.agents/plugins/marketplace.json`.
+Пример ревью ветки относительно `main` с контекстом Tracker:
 
-## Плагины
-
-| Плагин | Назначение |
-|---|---|
-| `deep-code-review` | Глубокое ревью локальных изменений и GitHub PR; содержит скиллы `deep-code-review` и `github-pr-worktree-review`. |
-
-## Первая установка из этого репозитория
-
-На Mac подготовьте валидаторы, проверьте плагин и зарегистрируйте checkout как marketplace:
-
-```bash
-cd /Users/shangin/g/shangin-skills
-./scripts/bootstrap-dev.sh
-./scripts/validate-plugin.sh deep-code-review
-codex plugin marketplace add "$PWD"
+```text
+Используй $deep-code-review. Проверь изменения от merge-base с origin/main до HEAD. Учти требования DATALENS-1234.
 ```
 
-Если плагин ещё не установлен, добавьте его:
+Для нетривиального изменения скилл выполняет пять направлений ревью: Correctness, Integration, Resilience, Standards и Spec. Замечания получают стабильные номера `#1`, `#2`, …, поэтому после отчёта можно написать:
 
-```bash
-codex plugin add deep-code-review@shangin-skills
+```text
+Исправь #1, #3 и #6. Для #2 используй предложенный мной вариант.
 ```
 
-Если `deep-code-review@personal` уже установлен, держите активной только одну копию плагина. После регистрации `shangin-skills` перенесите установку:
+## Ревью GitHub PR или удалённой ветки
 
-```bash
-codex plugin remove deep-code-review@personal
-codex plugin add deep-code-review@shangin-skills
+Пример PR:
+
+```text
+Используй $github-pr-worktree-review и проведи глубокое ревью https://github.com/owner/repository/pull/123.
 ```
 
-На удалённом сервере один раз клонируйте репозиторий и зарегистрируйте его:
+Пример удалённой ветки:
 
-```bash
-ssh serv
-mkdir -p "$HOME/g"
-git clone git@github.com:jhoncool/shangin-skills.git "$HOME/g/shangin-skills"
-cd "$HOME/g/shangin-skills"
-./scripts/bootstrap-dev.sh
-./scripts/validate-plugin.sh deep-code-review
-codex plugin marketplace add "$PWD"
+```text
+Используй $github-pr-worktree-review. Проверь ветку origin/feature-branch относительно origin/main.
 ```
 
-Затем установите `deep-code-review@shangin-skills`. Если на сервере уже установлен `deep-code-review@personal`, используйте показанную выше пару `codex plugin remove` и `codex plugin add` вместо одного `codex plugin add`.
+Пример без доступного `gh`:
 
-После установки откройте новую задачу Codex: открытая задача использует снимок каталога скиллов, полученный при старте.
-
-## Обновление плагина
-
-Исходником считается копия в этом репозитории. Обычный цикл обновления выполняется на Mac:
-
-```bash
-cd /Users/shangin/g/shangin-skills
-
-# Измените plugins/deep-code-review, затем создайте новую версию.
-./scripts/bump-plugin-version.sh deep-code-review
-
-git diff --check
-git status --short
-git add plugins/deep-code-review
-git commit -m "Update deep-code-review"
-git push
-
-# Переустановите локальный снимок.
-codex plugin add deep-code-review@shangin-skills
+```text
+Используй $github-pr-worktree-review для https://github.com/owner/repository/pull/123. gh недоступен; используй origin/main как base-ветку.
 ```
 
-`bump-plugin-version.sh` сохраняет базовую semver-версию, заменяет суффикс на новый `+codex.<timestamp>` и запускает штатные валидаторы Codex. Не меняйте cachebuster отдельно на сервере: обе машины должны устанавливать одну закоммиченную версию.
+Если в запросе, PR, имени ветки или сообщениях коммитов найден ключ Yandex Tracker, скилл использует доступный Startrek-контекст автоматически.
 
-После push обновите сервер:
+---
 
-```bash
-ssh serv
-cd "$HOME/g/shangin-skills"
-git pull --ff-only
-./scripts/validate-plugin.sh deep-code-review
-codex plugin add deep-code-review@shangin-skills
-```
-
-Затем откройте новые задачи Codex на Mac и сервере. Проверить активную версию можно командой:
-
-```bash
-codex plugin list --json
-```
-
-## Добавление нового плагина
-
-Штатный scaffold сразу создаёт каталог плагина и запись в marketplace:
-
-```bash
-cd /Users/shangin/g/shangin-skills
-CODEX_ROOT="${CODEX_HOME:-$HOME/.codex}"
-
-python3 "$CODEX_ROOT/skills/.system/plugin-creator/scripts/create_basic_plugin.py" \
-  my-plugin \
-  --path "$PWD/plugins" \
-  --marketplace-path "$PWD/.agents/plugins/marketplace.json" \
-  --with-skills \
-  --with-marketplace \
-  --category "Developer Tools"
-```
-
-После заполнения манифеста и скиллов:
-
-```bash
-./scripts/bump-plugin-version.sh my-plugin
-git add plugins/my-plugin .agents/plugins/marketplace.json
-git commit -m "Add my-plugin"
-git push
-codex plugin add my-plugin@shangin-skills
-```
-
-На сервере достаточно сделать `git pull --ff-only`, запустить `./scripts/validate-plugin.sh my-plugin` и выполнить `codex plugin add my-plugin@shangin-skills`.
-
-Сохраняйте лицензии и сведения об исходной ревизии рядом с любыми включёнными сторонними материалами. Не храните в репозитории токены, ключи, cookies и локальные файлы аутентификации.
-
-## Восстановление старой версии
-
-История конкретного плагина доступна отдельно от остальных:
-
-```bash
-git log -- plugins/deep-code-review
-```
-
-Чтобы восстановить содержимое из выбранного коммита, верните каталог, создайте новый cachebuster, закоммитьте восстановление и пройдите обычное обновление:
-
-```bash
-git restore --source=<commit> -- plugins/deep-code-review
-./scripts/bump-plugin-version.sh deep-code-review
-```
+**Агенту, который изменяет или выпускает плагины:** перед началом работы обязательно прочитать [DEVELOPMENT.md](DEVELOPMENT.md).

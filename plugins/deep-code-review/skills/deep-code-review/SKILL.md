@@ -7,6 +7,16 @@ description: Perform a deep, high-confidence review of local code changes using 
 
 Review the requested change set without modifying code. Prefer a few verified findings over a long speculative list.
 
+## Check dependencies
+
+Before reading repository state, run the bundled preflight from this skill's installed directory:
+
+```bash
+<skill-dir>/../../scripts/doctor.sh --workflow deep-code-review
+```
+
+Stop on any `ERROR` and return the script's remediation. Do not install system programs or external plugins automatically. A `WARNING` about `gh` does not block a local review; report it only when GitHub metadata would otherwise be part of the selected scope.
+
 ## Establish the scope
 
 1. Read applicable `AGENTS.md`, `CLAUDE.md`, contributor guides, and directory-local instructions before judging the changes.
