@@ -1,7 +1,7 @@
 {
-  "name": "yandex-skills",
+  "name": "shangin-skills",
   "interface": {
-    "displayName": "Yandex Skills"
+    "displayName": "Shangin Skills"
   },
   "plugins": [
     {

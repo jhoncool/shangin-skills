@@ -1,4 +1,4 @@
-# yandex-skills
+# shangin-skills
 
 Git-репозиторий с исходниками личных Codex-плагинов. Репозиторий одновременно является локальным Codex marketplace, поэтому в него можно добавлять несколько независимых плагинов и устанавливать их по имени.
 
@@ -29,7 +29,7 @@ scripts/
 На Mac подготовьте валидаторы, проверьте плагин и зарегистрируйте checkout как marketplace:
 
 ```bash
-cd /Users/shangin/g/yandex-skills
+cd /Users/shangin/g/shangin-skills
 ./scripts/bootstrap-dev.sh
 ./scripts/validate-plugin.sh deep-code-review
 codex plugin marketplace add "$PWD"
@@ -38,14 +38,14 @@ codex plugin marketplace add "$PWD"
 Если плагин ещё не установлен, добавьте его:
 
 ```bash
-codex plugin add deep-code-review@yandex-skills
+codex plugin add deep-code-review@shangin-skills
 ```
 
-Если `deep-code-review@personal` уже установлен, держите активной только одну копию плагина. После регистрации `yandex-skills` перенесите установку:
+Если `deep-code-review@personal` уже установлен, держите активной только одну копию плагина. После регистрации `shangin-skills` перенесите установку:
 
 ```bash
 codex plugin remove deep-code-review@personal
-codex plugin add deep-code-review@yandex-skills
+codex plugin add deep-code-review@shangin-skills
 ```
 
 На удалённом сервере один раз клонируйте репозиторий и зарегистрируйте его:
@@ -53,14 +53,14 @@ codex plugin add deep-code-review@yandex-skills
 ```bash
 ssh serv
 mkdir -p "$HOME/g"
-git clone git@github.com:jhoncool/yandex-skills.git "$HOME/g/yandex-skills"
-cd "$HOME/g/yandex-skills"
+git clone git@github.com:jhoncool/shangin-skills.git "$HOME/g/shangin-skills"
+cd "$HOME/g/shangin-skills"
 ./scripts/bootstrap-dev.sh
 ./scripts/validate-plugin.sh deep-code-review
 codex plugin marketplace add "$PWD"
 ```
 
-Затем установите `deep-code-review@yandex-skills`. Если на сервере уже установлен `deep-code-review@personal`, используйте показанную выше пару `codex plugin remove` и `codex plugin add` вместо одного `codex plugin add`.
+Затем установите `deep-code-review@shangin-skills`. Если на сервере уже установлен `deep-code-review@personal`, используйте показанную выше пару `codex plugin remove` и `codex plugin add` вместо одного `codex plugin add`.
 
 После установки откройте новую задачу Codex: открытая задача использует снимок каталога скиллов, полученный при старте.
 
@@ -69,7 +69,7 @@ codex plugin marketplace add "$PWD"
 Исходником считается копия в этом репозитории. Обычный цикл обновления выполняется на Mac:
 
 ```bash
-cd /Users/shangin/g/yandex-skills
+cd /Users/shangin/g/shangin-skills
 
 # Измените plugins/deep-code-review, затем создайте новую версию.
 ./scripts/bump-plugin-version.sh deep-code-review
@@ -81,7 +81,7 @@ git commit -m "Update deep-code-review"
 git push
 
 # Переустановите локальный снимок.
-codex plugin add deep-code-review@yandex-skills
+codex plugin add deep-code-review@shangin-skills
 ```
 
 `bump-plugin-version.sh` сохраняет базовую semver-версию, заменяет суффикс на новый `+codex.<timestamp>` и запускает штатные валидаторы Codex. Не меняйте cachebuster отдельно на сервере: обе машины должны устанавливать одну закоммиченную версию.
@@ -90,10 +90,10 @@ codex plugin add deep-code-review@yandex-skills
 
 ```bash
 ssh serv
-cd "$HOME/g/yandex-skills"
+cd "$HOME/g/shangin-skills"
 git pull --ff-only
 ./scripts/validate-plugin.sh deep-code-review
-codex plugin add deep-code-review@yandex-skills
+codex plugin add deep-code-review@shangin-skills
 ```
 
 Затем откройте новые задачи Codex на Mac и сервере. Проверить активную версию можно командой:
@@ -107,7 +107,7 @@ codex plugin list --json
 Штатный scaffold сразу создаёт каталог плагина и запись в marketplace:
 
 ```bash
-cd /Users/shangin/g/yandex-skills
+cd /Users/shangin/g/shangin-skills
 CODEX_ROOT="${CODEX_HOME:-$HOME/.codex}"
 
 python3 "$CODEX_ROOT/skills/.system/plugin-creator/scripts/create_basic_plugin.py" \
@@ -126,10 +126,10 @@ python3 "$CODEX_ROOT/skills/.system/plugin-creator/scripts/create_basic_plugin.p
 git add plugins/my-plugin .agents/plugins/marketplace.json
 git commit -m "Add my-plugin"
 git push
-codex plugin add my-plugin@yandex-skills
+codex plugin add my-plugin@shangin-skills
 ```
 
-На сервере достаточно сделать `git pull --ff-only`, запустить `./scripts/validate-plugin.sh my-plugin` и выполнить `codex plugin add my-plugin@yandex-skills`.
+На сервере достаточно сделать `git pull --ff-only`, запустить `./scripts/validate-plugin.sh my-plugin` и выполнить `codex plugin add my-plugin@shangin-skills`.
 
 Сохраняйте лицензии и сведения об исходной ревизии рядом с любыми включёнными сторонними материалами. Не храните в репозитории токены, ключи, cookies и локальные файлы аутентификации.
 
