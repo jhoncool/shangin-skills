@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deep Code Review"
+  short_description: "Five-lane review with verified findings"
+  default_prompt: "Use $deep-code-review to review the current changes deeply and report only verified, actionable findings."

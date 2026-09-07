@@ -1,0 +1,20 @@
+{
+  "name": "yandex-skills",
+  "interface": {
+    "displayName": "Yandex Skills"
+  },
+  "plugins": [
+    {
+      "name": "deep-code-review",
+      "source": {
+        "source": "local",
+        "path": "./plugins/deep-code-review"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

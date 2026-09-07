@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub PR Worktree Review"
+  short_description: "Prepare a worktree for deep PR review"
+  default_prompt: "Use $github-pr-worktree-review to review this GitHub pull request in an isolated worktree."

@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "commit": "3cca18b368ae95cdbdebbff572ccafa662551015",
+  "skillPath": "skills/engineering/code-review/SKILL.md",
+  "upstreamFile": "upstream.md",
+  "upstreamSha256": "47f4e52c21694def9c7c11cbfbf891ca35eac7a93e395797515be3c8a409ae50",
+  "installerCommand": "npx skills@latest add mattpocock/skills --skill code-review --agent codex --yes --copy",
+  "integrationFile": "reference.md",
+  "integration": "The exact upstream instructions are bundled as upstream.md. The integration wrapper limits them to Standards/Spec material and prevents SKILL.md discovery as a third skill."
+}
